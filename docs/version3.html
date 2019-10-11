@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title> Rosie Wenzhao Zhang INF1339 Project 2</title>
+    <style>
+        .output {font-weight: 500; color: coral}
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    <script>
+        //Global variables
+        var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=rainbow&api-key=hYYJmTUCKox2MGxehgJ01pEf03zWfO8F"
+        var articleCount = 0
+        
+        // P5 setup 
+        function setup() {
+            // not using P5 to draw anything
+            noCanvas();
+            // Send the url to ask for data and when the data is received 
+            // run the callback function "gotData"
+            loadJSON(url, gotData)
+        }
+        
+        // Declare the function gotData
+        function gotData(data) {
+            appendToPage(data)
+            
+            //Check metadata for subsequent pages
+            var hits = data.response.meta.hits
+            
+            //loop twice over appending the page parameter to the URL
+            for (var i = 1; i < 3; i++){
+                loadJSON(url + '&page=' +i, appendToPage)
+            }
+        }
+        
+        function appendToPage(data){
+            var articles = data.response.docs
+            //Loop over the docs to create a heading and a paragraph for every article
+            for (var i = 0; i< articles.length; i++){
+                articleCount ++
+                h = document.createElement('h3')
+                h.innerHTML = '(' + articleCount + ')' + articles[i].headline.main
+                document.body.appendChild(h)
+                p = document.createElement('p')
+                p.innerHTML = articles[i].snippet
+                document.body.appendChild(p)
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>New York Times API: Articles from all time about rainbows</h1>
+</body>
+</html>
