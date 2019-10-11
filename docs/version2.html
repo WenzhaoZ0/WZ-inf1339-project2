@@ -21,8 +21,11 @@
         
         // Declare the function gotData
         function gotData(data) {
-            alert("FUNCTION GOTDATA WAS ACTIVATED")
-            document.getElementById("test_output").innerHTML = data.response.docs[0].headline.main
+            var output_text = ""
+            for (i = 0; i < data.response.docs.length; i ++){
+                output_text = output_text + "<br />" + data.response.docs[i].headline.main
+            }
+            document.getElementById("test_output").innerHTML=output_text
         }
     </script>
 </head>
